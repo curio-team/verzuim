@@ -6,12 +6,17 @@ use Illuminate\Http\Request;
 
 use App\Imports\LogsImport;
 use App\Models\Log;
+use Carbon\Carbon;
+use DB;
 
 class ImportController extends Controller
 {
     public function show()
     {
-        return view('import.show');
+        $last = DB::table("logs")->max("date");
+        $last = (new Carbon($last))->format("d-m-Y");
+        return view('import.show')
+                ->with(compact('last'));
     }
 
     public function upload(Request $request)

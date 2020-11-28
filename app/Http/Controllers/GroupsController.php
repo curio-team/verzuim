@@ -28,7 +28,7 @@ class GroupsController extends Controller
         $group = AmoAPI::get('groups/' . $id);
         $students = collect($group["users"]);
         $ids = $students->pluck("id")->map(function ($item) {
-            return substr($item, 1);
+            return preg_replace("/[^0-9]/", "", $item);
         });
 
         //Get date of four weeks ago (counted from last monday)

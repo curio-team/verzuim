@@ -19,6 +19,6 @@ class SettingsController extends Controller
         $user = User::find(\Auth::user()->id);
         $user->weeks = $request->weeks;
         $user->save();
-        return redirect()->back()->with("status", "Aangepast");
+        return redirect()->back()->with("status", ["success" => "Termijn aangepast!"]);
     }
 }

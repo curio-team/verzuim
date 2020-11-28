@@ -2,6 +2,7 @@
 
 @section('content')
 
+    <h3>Klassen</h3>
     <table class="table mt-4">
         @foreach($groups as $group)
             <tr>

@@ -47,16 +47,19 @@ class GroupsController extends Controller
     {
         $user_id = \Auth::user()->id;
         $count = DB::table('group_user')->where([['user_id', $user_id], ['group_id', $id]])->count();
+        $group = $group = AmoAPI::get('groups/' . $id)["name"];
         if($count > 0)
         {
             DB::table('group_user')->where([['user_id', $user_id], ['group_id', $id]])->delete();
+            $msg = ['danger' => 'Groep ' . $group . ' is niet langer favoriet.'];
         }
         else
         {
             DB::table('group_user')->insert(['user_id' => $user_id, 'group_id' => $id]);
+            $msg = ['success' => 'Groep ' . $group . ' is nu als favoriet zichtbaar op de homepage.'];
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('status', $msg);
     }
 
     public function home()

@@ -3,7 +3,7 @@
 
     <h3>Instellingen</h3>
     <p class="text-muted">{{ $user->name }}, {{ $user->id }}</p>
-       <form method="POST" action="{{ route('settings.save') }}">
+    <form method="POST" action="{{ route('settings.save') }}">
         @csrf
         <div class="form-group row">
             <label for="weeks" class="col-form-label col-sm-3">Aantal weken terug kijken:</label>

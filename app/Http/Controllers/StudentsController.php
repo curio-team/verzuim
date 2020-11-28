@@ -13,7 +13,7 @@ class StudentsController extends Controller
     public function me()
     {
         $user = \Auth::user();
-        $id = substr($user->id, 1);
+        $id = preg_replace("/[^0-9]/", "", $user->id);
         return $this->show($id, $user->toArray());
     }
 
@@ -34,13 +34,22 @@ class StudentsController extends Controller
                             FROM logs
                             WHERE date > ? AND type <> 'Present' AND student_id = ?
                             ORDER BY date, hour_start", [$date->format("Y-m-d"), $id]);
-
         $logs = collect($logs);
-        return view('ladder.student')
+        
+        $present = DB::select("SELECT SUM(duration) AS total
+                            FROM logs
+                            WHERE date > ? AND type = 'Present' AND student_id = ?"
+                            , [$date->format("Y-m-d"), $id]);
+        $present = $present[0]->total ?? 0;
+
+        if(count($logs)) $view = "ladder.student";
+        else $view = "ladder.empty";
+        return view($view)
                 ->with(compact('logs'))
+                ->with(compact('present'))
                 ->with(compact('student'))
                 ->with('now', Carbon::today())
-                ->with('then', $date);;
+                ->with('then', $date);
     }
 
     public function handle($id, $step, $reason)

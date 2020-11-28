@@ -35,8 +35,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function getAdminAttribute()
+    public function units()
+	{
+		return $this->belongsToMany('App\Models\Unit')->withPivot('coord')->orderBy('name');
+	}
+
+    public function getTeamAdminAttribute()
     {
-        return DB::table('admins')->where('user_id', $this->id)->count();
+        return false;
     }
 }

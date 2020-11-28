@@ -31,18 +31,28 @@ Route::middleware(["auth", "teacher"])->group(function () {
         Route::get('/handle/{id}/{step}/{reason}', 'StudentsController@handle')->name('handle');
     });
 
-    Route::middleware('admin')->group(function () {
+    // Route::middleware('admin')->group(function () {
 
-        Route::prefix('import')->name('import.')->group(function () {
-            Route::get('/', 'ImportController@show')->name('show');
-            Route::post('/', 'ImportController@upload')->name('upload');
-        });
+    //     Route::prefix('import')->name('import.')->group(function () {
+    //         Route::get('/', 'ImportController@show')->name('show');
+    //         Route::post('/', 'ImportController@upload')->name('upload');
+    //     });
     
-        Route::prefix('admins')->name('admins.')->group(function () {
-            Route::get('/', 'AdminsController@show')->name('show');
-            Route::post('/', 'AdminsController@save')->name('save');
-            Route::delete('/{code}', 'AdminsController@delete')->name('delete');
-        });
+    //     Route::prefix('admins')->name('admins.')->group(function () {
+    //         Route::get('/', 'AdminsController@show')->name('show');
+    //         Route::post('/', 'AdminsController@save')->name('save');
+    //         Route::delete('/{code}', 'AdminsController@delete')->name('delete');
+    //     });
+
+    // });
+
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+
+        Route::redirect('/', '/admin/units')->name('home');
+        Route::resource('units', 'UnitController')->except('show');
+        // Route::prefix('units')->name('units.')->group(function () {
+        //     Route::get('/', 'UnitController@index')->name('index');
+        // });
 
     });
 
@@ -55,7 +65,7 @@ Route::middleware(["auth", "teacher"])->group(function () {
 
 });
 
-Route::middleware(["auth"])->group(function () {
+Route::middleware("auth")->group(function () {
     Route::get('/me', 'StudentsController@me')->name('home.student');
 });
 

@@ -33,7 +33,7 @@
                             <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'groups')) active @endif">
                                 <a class="nav-link" href="{{ route('groups.index') }}">Klassen</a>
                             </li>
-                            @if(\Auth::user()->admin)
+                            @if(\Auth::user()->team_admin)
                                 <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'import')) active @endif">
                                     <a class="nav-link" href="{{ route('import.show') }}">Import</a>
                                 </li>
@@ -44,14 +44,17 @@
                         </ul>
                         <div class="btn-group d-none d-md-flex">
                             @yield('buttons')
-                            <a class="btn btn-outline-dark" href="{{ route('settings.show') }}"><i class="fas fa-cog fa-fw" aria-hidden="true"></i></a>
-                            <a class="btn btn-outline-dark" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt fa-fw" aria-hidden="true"></i></a>
+                            @if(\Auth::user()->admin)
+                                <a class="btn btn-outline-dark" href="{{ route('admin.home') }}"><i class="fas fa-users-cog fa-fw"></i></a>
+                            @endif
+                            <a class="btn btn-outline-dark" href="{{ route('settings.show') }}"><i class="fas fa-cog fa-fw"></i></a>
+                            <a class="btn btn-outline-dark" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt fa-fw"></i></a>
                         </div>
                     </div>
                 @endif
             </div>
         </nav>
-        @yield('subnav')
+        @includeWhen(Str::startsWith(Route::current()->uri, 'admin'), 'admin.nav')
         <div class="@yield('container', 'container mt-3')">
             @include('layouts.status')
             @yield('content')

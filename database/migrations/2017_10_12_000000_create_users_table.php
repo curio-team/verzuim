@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('login')->default('amoclient');
             $table->string('password')->nullable();
             $table->boolean('active')->default(true);
+            $table->boolean('admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
             

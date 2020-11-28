@@ -32,7 +32,7 @@ class GroupsController extends Controller
         });
 
         //Get date of four weeks ago (counted from last monday)
-        $date = Carbon::today()->startOfWeek()->subDays(28);
+        $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
 
         $students = $this->ladder($date, $ids);
 
@@ -68,7 +68,7 @@ class GroupsController extends Controller
             return redirect()->route('groups.index');
         }
 
-        $date = Carbon::today()->startOfWeek()->subDays(28);
+        $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
         $data = array();
 
         foreach ($groups as $group_id)

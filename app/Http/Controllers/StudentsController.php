@@ -29,7 +29,7 @@ class StudentsController extends Controller
             }
         }
         
-        $date = Carbon::today()->startOfWeek()->subDays(28);
+        $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
         $logs = DB::select("SELECT *
                             FROM logs
                             WHERE date > ? AND type <> 'Present' AND student_id = ?
@@ -45,7 +45,7 @@ class StudentsController extends Controller
 
     public function handle($id, $step, $reason)
     {
-        $date = Carbon::today()->startOfWeek()->subDays(28);
+        $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
 
         DB::statement("UPDATE logs
                             SET handled$step = 1

@@ -23,10 +23,6 @@ Route::middleware(["auth", "teacher"])->group(function () {
         Route::post('/', 'ImportController@upload')->name('upload');
     });
     
-    Route::prefix('ladder')->name('ladder.')->group(function () {
-        Route::get('/', 'LadderController@show')->name('show');
-    });
-    
     Route::prefix('students')->name('students.')->group(function () {
         Route::get('/{id}', 'StudentsController@show')->name('show');
         Route::get('/handle/{id}/{step}/{reason}', 'StudentsController@handle')->name('handle');
@@ -36,6 +32,11 @@ Route::middleware(["auth", "teacher"])->group(function () {
         Route::get('/', 'GroupsController@index')->name('index');
         Route::get('/{group}', 'GroupsController@show')->name('show');
         Route::get('/favorite/{group}', 'GroupsController@favorite')->name('favorite');
+    });
+
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/', 'SettingsController@show')->name('show');
+        Route::post('/', 'SettingsController@save')->name('save');
     });
 
 });

@@ -14,12 +14,12 @@ class LogsImport implements ToModel, WithHeadingRow
 
     public function __construct($date)
     {
-        $this->check_date = Carbon::createFromFormat("Y-m-d", $date);
+        $this->check_date = new Carbon($date);
     }
 
     public function model(array $row)
     {
-        $date = Carbon::createFromFormat("d-m-Y", $row['datumvan']);
+        $date = Carbon::createFromFormat("!d-m-Y", $row['datumvan']);
         if($date->lessThanOrEqualTo($this->check_date)) return;
         
         $duration = ($row['lesuureind'] - $row['lesuurbegin'] + 1) / 2;

@@ -38,8 +38,8 @@
     <div class="step step5">
         <div class="step-text">
             <p class="text-muted m-0">Fase 5</p>
-            <p class="font-weight-bold m-0">Zorgvraag</p>
-            <p class="m-0">Leerplicht of zorg</p>
+            <p class="font-weight-bold m-0">Leerplicht of zorg</p>
+            <p class="m-0">Melding leerplicht</p>
         </div>
     </div>
     <!------------------------------->

@@ -9,6 +9,10 @@
     .ladder{
         page-break-after: always;
     }
+    .ladder-sm{
+        min-height: 20vh !important;
+        margin-bottom: 3rem !important;
+    }
 }
 
 .ladder{

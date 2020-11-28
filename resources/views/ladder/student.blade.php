@@ -2,7 +2,14 @@
 
 @push('head')
     <link rel="stylesheet" href="/css/ladder.css">
+    <style>@page{size: A4 portrait;} @media print{ .ladder{page-break-after: auto;}}</style>
 @endpush
+
+@if(\Auth::user()->type == "teacher")
+    @section('buttons')
+        <a class="btn btn-outline-dark" href="javascript:window.print()"><i class="fas fa-print"></i></a>
+    @endsection
+@endif
 
 @section("content")
 
@@ -105,7 +112,7 @@
                     <th>Registratie door</th>
                     <th>Opmerkingen</th>
                     @if(\Auth::user()->type == "teacher")
-                        <th>Afgehandeld</th>
+                        <th class="d-print-none">Afgehandeld</th>
                     @endif
                 </tr>
             </thead>
@@ -120,7 +127,7 @@
                         <td>{{ $log->logged_by }}</td>
                         <td>{{ $log->reason }} {{ $log->comment }}</td>
                         @if(\Auth::user()->type == "teacher")
-                            <td>
+                            <td class="d-print-none">
                                 @if($log->handled1) In fase 1<br /> @endif
                                 @if($log->handled2) In fase 2<br /> @endif
                                 @if($log->handled3) In fase 3<br /> @endif

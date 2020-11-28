@@ -20,15 +20,20 @@
                             <li class="nav-item @if(Route::currentRouteName() == 'home') active @endif">
                                 <a class="nav-link" href="{{ route('home') }}">Start</a>
                             </li>
-                            <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'groups')) active @endif">
-                                <a class="nav-link" href="{{ route('groups.index') }}">Klassen</a>
-                            </li>
-                            <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'import')) active @endif">
-                                <a class="nav-link" href="{{ route('import.show') }}">Import</a>
-                            </li>
                             <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'about')) active @endif">
                                 <a class="nav-link" href="{{ route('about') }}">Uitleg</a>
                             </li>
+                            <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'groups')) active @endif">
+                                <a class="nav-link" href="{{ route('groups.index') }}">Klassen</a>
+                            </li>
+                            @if(\Auth::user()->admin)
+                                <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'import')) active @endif">
+                                    <a class="nav-link" href="{{ route('import.show') }}">Import</a>
+                                </li>
+                                <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'admins')) active @endif">
+                                    <a class="nav-link" href="{{ route('admins.show') }}">Admins</a>
+                                </li>
+                            @endif
                         </ul>
                         <div class="btn-group d-none d-md-flex">
                             @yield('buttons')

@@ -17,10 +17,13 @@ use App\Http\Controllers\ImportController;
 Route::middleware(["auth", "teacher"])->group(function () {
 
     Route::get('/', 'GroupsController@home')->name('home');
-    
-    Route::prefix('import')->name('import.')->group(function () {
-        Route::get('/', 'ImportController@show')->name('show');
-        Route::post('/', 'ImportController@upload')->name('upload');
+
+    Route::view('about', 'about')->name('about');
+
+    Route::prefix('groups')->name('groups.')->group(function () {
+        Route::get('/', 'GroupsController@index')->name('index');
+        Route::get('/{group}', 'GroupsController@show')->name('show');
+        Route::get('/favorite/{group}', 'GroupsController@favorite')->name('favorite');
     });
     
     Route::prefix('students')->name('students.')->group(function () {
@@ -28,18 +31,25 @@ Route::middleware(["auth", "teacher"])->group(function () {
         Route::get('/handle/{id}/{step}/{reason}', 'StudentsController@handle')->name('handle');
     });
 
-    Route::prefix('groups')->name('groups.')->group(function () {
-        Route::get('/', 'GroupsController@index')->name('index');
-        Route::get('/{group}', 'GroupsController@show')->name('show');
-        Route::get('/favorite/{group}', 'GroupsController@favorite')->name('favorite');
+    Route::middleware('admin')->group(function () {
+
+        Route::prefix('import')->name('import.')->group(function () {
+            Route::get('/', 'ImportController@show')->name('show');
+            Route::post('/', 'ImportController@upload')->name('upload');
+        });
+    
+        Route::prefix('admins')->name('admins.')->group(function () {
+            Route::get('/', 'AdminsController@show')->name('show');
+            Route::post('/', 'AdminsController@save')->name('save');
+            Route::delete('/{code}', 'AdminsController@delete')->name('delete');
+        });
+
     });
 
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', 'SettingsController@show')->name('show');
         Route::post('/', 'SettingsController@save')->name('save');
     });
-
-    Route::view('about', 'about')->name('about');
 
 });
 

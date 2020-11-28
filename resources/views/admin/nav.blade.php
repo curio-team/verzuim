@@ -5,6 +5,9 @@
             <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'admin/units')) active @endif">
                 <a class="nav-link" href="{{ route('admin.units.index') }}">Afdelingen</a>
             </li>
+            <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'admin/users')) active @endif">
+                <a class="nav-link" href="{{ route('admin.users.index') }}">Gebruikers</a>
+            </li>
         </ul>
     </div>
 </nav>

@@ -8,7 +8,6 @@
     
     <div class="login row">
         <div class="col-md-6">
-            <div class="alert alert-info">Je gaat een account aanvragen. Wacht na het aanvragen op goedkeurig voor je kunt inloggen.</div>
             <form class="flex-grow-1" method="POST" action="{{ route('register.do') }}">
                 @csrf
                 <div class="form-group">
@@ -18,6 +17,19 @@
                 <div class="form-group">
                     <label for="email">E-mailadres:</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="a.devries@curio.nl" value="{{ old('email') }}">
+                </div>
+                <div class="form-group">
+                    <label for="code">Docentcode:</label>
+                    <input type="text" class="form-control" id="code" name="code" placeholder="ab01" value="{{ old('code') }}">
+                </div>
+                <div class="form-group">
+                    <label for="unit">Afdeling:</label>
+                    <select name="unit" id="unit" class="form-control">
+                        <option value=""> - kies een afdeling - </option>
+                        @foreach ($units as $unit)
+                            <option value="{{ $unit->id }}" @if(old('unit') == $unit->id) selected @endif>{{ $unit->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="password">Wachtwoord:</label>

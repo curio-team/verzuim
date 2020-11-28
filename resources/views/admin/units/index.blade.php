@@ -1,29 +1,18 @@
 @extends("layouts.app")
 @section("content")
 
-    <table class="table table-striped table-hover">
-        <thead>
+    <div class="d-flex justify-content-between align-items-start">
+        <h3>Afdelingen</h3>
+        <a href="{{ route('admin.units.create') }}" class="btn btn-success"><i class="fas fa-plus"></i> Nieuw</a>
+    </div>
+    <table class="table table-striped table-hover mt-3">
+        @foreach($units as $unit)
             <tr>
-                <th>Afdeling</th>
-                <th>Gebruikers</th>
-                <th class="p-0 align-middle text-right">
-                    <a href="{{ route('admin.units.create') }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Nieuw</a>
-                </th>
+                <td>{{ $unit->name }}</td>
+                <td><a href="{{ route('admin.units.users.index', $unit) }}"><i class="fas fa-fw fa-users"></i> Gebruikers</a></td>
+                <td><a href="{{ route('admin.units.edit', $unit) }}"><i class="fas fa-fw fa-edit"></i> Aanpassen</a></td>
             </tr>
-        </thead>
-        <tbody>
-
-            @foreach($units as $unit)
-                <tr>
-                    <td>{{ $unit->name }}</td>
-                    <td></td>
-                    <td class="text-right align-middle">
-                        <a href="{{ route('admin.units.edit', $unit) }}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-edit"></i></a>
-                    </td>
-                </tr>
-            @endforeach
-
-        </tbody>
+        @endforeach
     </table>
 
 @endsection

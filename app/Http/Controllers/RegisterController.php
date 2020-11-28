@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Unit;
 use DB;
 use Str;
 
@@ -13,7 +14,9 @@ class RegisterController extends Controller
 {
     public function form()
     {
-        return view('auth.register');
+        $units = Unit::orderBy('name')->get();
+        return view('auth.register')
+                ->with(compact('units'));
     }
 
     public function do(Request $request)
@@ -21,17 +24,13 @@ class RegisterController extends Controller
         $request->validate([
             'name'      => 'required',
             'email'     => 'required|email|ends_with:@curio.nl|unique:users',
-            'password'  => 'required|confirmed|between:6,1000'
+            'password'  => 'required|confirmed|between:6,1000',
+            'code'      => 'required|between:4,10|unique:users,id',
+            'unit'      => 'required'
         ]);
         
-        $id = Str::uuid();
-        while(DB::table('users')->where('id', $id)->count())
-        {
-            $id = Str::uuid();
-        }
-
         $user = new User();
-        $user->id = $id;
+        $user->id = $request->code;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->type = 'teacher';
@@ -39,6 +38,8 @@ class RegisterController extends Controller
         $user->password = Hash::make($request->password);
         $user->active = false;
         $user->save();
+
+        $user->units()->attach($request->unit);
 
         return redirect()->back()->with('status', ['success' => 'Account aangevraagd - wacht op goedkeuring.']);
     }

@@ -49,10 +49,14 @@ Route::middleware(["auth", "teacher"])->group(function () {
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
         Route::redirect('/', '/admin/units')->name('home');
+
         Route::resource('units', 'UnitController')->except('show');
-        // Route::prefix('units')->name('units.')->group(function () {
-        //     Route::get('/', 'UnitController@index')->name('index');
-        // });
+        Route::get('units/{unit}/users', 'UnitUserController@index')->name('units.users.index');
+        Route::post('units/{unit}/users', 'UnitUserController@sync_unit')->name('units.users.sync');
+        Route::patch('units/{unit}/users', 'UnitUserController@update')->name('units.users.update');
+        
+        Route::resource('users', 'UserController')->except(['create', 'store', 'show']);
+        Route::post('users/{user}/units', 'UnitUserController@sync_user')->name('users.units.sync');
 
     });
 

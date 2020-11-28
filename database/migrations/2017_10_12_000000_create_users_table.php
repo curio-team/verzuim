@@ -20,10 +20,12 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('type');
             $table->integer('weeks')->default(4);
+            $table->string('login')->default('amoclient');
+            $table->string('password')->nullable();
+            $table->boolean('active')->default(true);
             $table->rememberToken();
             $table->timestamps();
-
-
+            
             $table->primary('id');
         });
     }

@@ -51,15 +51,19 @@ Route::middleware(["auth", "teacher"])->group(function () {
         Route::post('/', 'SettingsController@save')->name('save');
     });
 
+    Route::get('logout', 'LoginController@logout')->name('logout');
+
 });
 
 Route::middleware(["auth"])->group(function () {
     Route::get('/me', 'StudentsController@me')->name('home.student');
 });
 
-Route::get('/login', function(){
-	return redirect('/amoclient/redirect');
-})->name('login');
+Route::get('/login', 'LoginController@form')->name('login');
+Route::redirect('/login/amoclient', '/amoclient/redirect')->name('login.do.amoclient');
+Route::post('/login/internal', 'LoginController@do')->name('login.do.internal');
+Route::get('/register', 'RegisterController@form')->name('register');
+Route::post('/register', 'RegisterController@do')->name('register.do');
 
 Route::get('/amoclient/ready', function(){
 	return redirect()->route('home');

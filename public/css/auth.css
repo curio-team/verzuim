@@ -1,0 +1,37 @@
+.login{
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    min-height: calc(100vh - 56px - 10rem);
+}
+
+.login > div:first-child{
+    border-right: 2px solid hsl(210, 17%, 95%);
+    padding-right: 3rem;
+}
+
+.btn-curio{
+    padding: 2rem 3rem;
+}
+
+.btn-curio img{
+    max-width: 200px;
+}
+
+@media screen and (max-width: 768px) {
+
+    .login > div:first-child{
+        border-right: none;
+        border-bottom: 2px solid hsl(210, 17%, 95%);
+    }
+
+    .login > div{
+        padding: 2rem 1rem !important;
+    }
+
+    .login{
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        min-height: calc(100vh - 56px - 4rem);
+    }
+
+}

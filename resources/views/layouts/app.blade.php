@@ -20,8 +20,8 @@
 
         <nav class="navbar navbar-light bg-light navbar-expand-sm">
             <div class="container">
-                <span class="navbar-brand mb-0 h1 d-flex align-items-center"><img src="logo.png" alt="logo" style="height: 28px;" class="pr-1">Verzuim</span>
-                @if(\Auth::user()->type == "teacher")
+                <span class="navbar-brand mb-0 h1 d-flex align-items-center"><a href="{{ route('home') }}" style="line-height: 1;"><img src="/logo.png" alt="logo" style="height: 28px;" class="pr-1"></a>Verzuim</span>
+                @if(optional(\Auth::user())->type == "teacher")
                     <div class="d-flex justify-content-between flex-grow-1">
                         <ul class="navbar-nav">
                             <li class="nav-item @if(Route::currentRouteName() == 'home') active @endif">
@@ -44,7 +44,8 @@
                         </ul>
                         <div class="btn-group d-none d-md-flex">
                             @yield('buttons')
-                            <a class="btn btn-outline-dark" href="{{ route('settings.show') }}"><i class="fas fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span>{{ Auth::user()->id }}</span></a>
+                            <a class="btn btn-outline-dark" href="{{ route('settings.show') }}"><i class="fas fa-cog fa-fw" aria-hidden="true"></i></a>
+                            <a class="btn btn-outline-dark" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt fa-fw" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 @endif

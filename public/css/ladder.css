@@ -1,3 +1,16 @@
+@page {
+    size: A4 landscape;
+}
+
+@media print{
+    hr{
+        display: none;
+    }
+    .ladder{
+        page-break-after: always;
+    }
+}
+
 .ladder{
     display: grid;
     grid-template-columns: repeat(5, 1fr);

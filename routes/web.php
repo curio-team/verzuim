@@ -39,6 +39,8 @@ Route::middleware(["auth", "teacher"])->group(function () {
         Route::post('/', 'SettingsController@save')->name('save');
     });
 
+    Route::view('about', 'about')->name('about');
+
 });
 
 Route::middleware(["auth"])->group(function () {

@@ -26,6 +26,9 @@
                             <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'import')) active @endif">
                                 <a class="nav-link" href="{{ route('import.show') }}">Import</a>
                             </li>
+                            <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'about')) active @endif">
+                                <a class="nav-link" href="{{ route('about') }}">Uitleg</a>
+                            </li>
                         </ul>
                         <div class="btn-group d-none d-md-flex">
                             @yield('buttons')

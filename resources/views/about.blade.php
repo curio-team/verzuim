@@ -7,35 +7,35 @@
         <div class="mr-5" style="min-width: 320px;">
             <p class="mt-4"><strong>Fase 1</strong></p>
             <ul>
-                <li>>0 melding(en) Absent</li>
-                <li>>1 melding(en) Te laat</li>
-                <li>>1 melding(en) Regulier absent</li>
+                <li>&gt;0 melding(en) Absent</li>
+                <li>&gt;1 melding(en) Te laat</li>
+                <li>&gt;1 melding(en) Regulier absent</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 2</strong></p>
             <ul>
-                <li>>1 melding(en) Absent</li>
-                <li>>3 melding(en) Te laat</li>
-                <li>>2 melding(en) Regulier absent</li>
+                <li>&gt;1 melding(en) Absent</li>
+                <li>&gt;3 melding(en) Te laat</li>
+                <li>&gt;2 melding(en) Regulier absent</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 3</strong></p>
             <ul>
-                <li>>2 melding(en) Absent</li>
-                <li>>4 melding(en) Te laat</li>
-                <li>>4 melding(en) Regulier absent</li>
+                <li>&gt;2 melding(en) Absent</li>
+                <li>&gt;4 melding(en) Te laat</li>
+                <li>&gt;4 melding(en) Regulier absent</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 4</strong></p>
             <ul>
-                <li>>12 uren Absent</li>
-                <li>>8 melding(en) Te laat</li>
+                <li>&gt;12 uren Absent</li>
+                <li>&gt;8 melding(en) Te laat</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 5</strong></p>
             <ul>
-                <li>>16 uren Absent</li>
-                <li>>12 melding(en) Te laat</li>
+                <li>&gt;16 uren Absent</li>
+                <li>&gt;12 melding(en) Te laat</li>
             </ul>
         </div>
         <div>

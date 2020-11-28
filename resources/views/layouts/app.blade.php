@@ -44,7 +44,7 @@
                         </ul>
                         <div class="btn-group d-none d-md-flex">
                             @yield('buttons')
-                            <a class="btn btn-outline-dark" href="{{ route('settings.show') }}"><i class="fas fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span>{{ Auth::user()->id }}</span></a>
+                            <a class="btn btn-outline-dark" href="{{ route('settings.show') }}"><i class="fas fa-cog fa-fw" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 @endif

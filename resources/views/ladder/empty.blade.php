@@ -7,7 +7,7 @@
 
 @if(\Auth::user()->type == "teacher")
     @section('buttons')
-        <a class="btn btn-outline-dark" href="javascript:window.print()"><i class="fas fa-print"></i></a>
+        <a class="btn btn-outline-dark" href="javascript:window.print()"><i class="fas fa-print fa-fw"></i></a>
     @endsection
 @endif
 

@@ -68,7 +68,7 @@ class GroupsController extends Controller
         $groups = DB::table('group_user')->where('user_id', $user_id)->orderBy('group_id')->get()->pluck('group_id');
         if($groups->count() < 1)
         {
-            return redirect()->route('groups.index');
+            return $this->index();
         }
 
         $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);

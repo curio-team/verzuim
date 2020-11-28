@@ -20,7 +20,7 @@
 
         <nav class="navbar navbar-light bg-light navbar-expand-sm">
             <div class="container">
-                <span class="navbar-brand mb-0 h1 d-flex align-items-center"><img src="logo.png" alt="logo" style="height: 28px;" class="pr-1">Verzuim</span>
+                <span class="navbar-brand mb-0 h1 d-flex align-items-center"><img src="/logo.png" alt="logo" style="height: 28px;" class="pr-1">Verzuim</span>
                 @if(\Auth::user()->type == "teacher")
                     <div class="d-flex justify-content-between flex-grow-1">
                         <ul class="navbar-nav">

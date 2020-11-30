@@ -101,6 +101,11 @@ class CoordUserController extends Controller
             return redirect()->back()->with('status', ['warning' => "Geen toestemming om aan deze afdeling toe te voegen."]);
         }
 
+        if(!User::find($request->code))
+        {
+            return redirect()->back()->with('status', ['warning' => "Gebruiker {$request->code} niet gevonden."]);
+        }
+
         $unit = Unit::find($request->unit);
         $unit->users()->attach($request->code);
         return redirect()->back()->with('status', ['success' => "Gebruiker {$request->code} is toegevoegd aan {$unit->name}."]);

@@ -11,10 +11,12 @@ use Carbon\Carbon;
 class LogsImport implements ToModel, WithHeadingRow
 {
     private $check_date = null;
+    private $unit_id = null;
 
-    public function __construct($date)
+    public function __construct($date, $unit)
     {
-        $this->check_date = new Carbon($date);
+        $this->check_date = $date;
+        $this->unit_id = $unit;
     }
 
     public function model(array $row)
@@ -25,6 +27,7 @@ class LogsImport implements ToModel, WithHeadingRow
         $duration = ($row['lesuureind'] - $row['lesuurbegin'] + 1) / 2;
 
         return new Log([
+            'unit_id' => $this->unit_id,
             'date' => $date->format('Y-m-d'),
             'student_id' => $row['ovnr'],
             'student_name' => $row['deelnemernaam'],

@@ -22,8 +22,9 @@ class CreateUsersTable extends Migration
             $table->integer('weeks')->default(4);
             $table->string('login')->default('amoclient');
             $table->string('password')->nullable();
-            $table->boolean('active')->default(true);
+            $table->integer('active')->default(1);
             $table->boolean('admin')->default(false);
+            $table->boolean('password_once')->default(false);
             $table->rememberToken();
             $table->timestamps();
             

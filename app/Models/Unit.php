@@ -11,6 +11,6 @@ class Unit extends Model
 
     public function users()
 	{
-		return $this->belongsToMany('App\Models\User')->withPivot('coord')->orderBy('name');
+		return $this->belongsToMany('App\Models\User')->withPivot(['importer', 'coord'])->orderBy('name');
 	}
 }

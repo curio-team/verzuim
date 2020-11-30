@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UnitController extends Controller
@@ -16,8 +17,7 @@ class UnitController extends Controller
 
     public function create()
     {
-        return view('admin.units.form')
-                ->with('unit', new Unit());
+        return view('admin.units.create');
     }
 
     public function store(Request $request, Unit $unit)
@@ -33,18 +33,31 @@ class UnitController extends Controller
 
     public function edit(Unit $unit)
     {
-        return view('admin.units.form')
-                ->with(compact('unit'));
+        return view('admin.units.edit')
+                ->with(compact('unit'))
+                ->with('users', User::all());
     }
 
     public function update(Request $request, Unit $unit)
     {
         $request->validate([
-            'unit' => 'required'
+            'unit' => 'required',
+            'users.*.member' => 'boolean',
+            'users.*.importer' => 'boolean',
+            'users.*.coord' => 'boolean'
         ]);
+
         $unit->name = $request->unit;
         $unit->save();
-        return redirect()->route('admin.units.index')->with('status', ['info' => "Afdeling {$unit->name} opgeslagen!"]);
+
+        foreach($request->users as $id => $values)
+        {
+            $unit->users()->updateExistingPivot($id, ['coord' => $values['coord']]);
+            $unit->users()->updateExistingPivot($id, ['importer' => $values['importer']]);
+            if(!$values['member']) $unit->users()->detach($id);
+        }
+
+        return redirect()->back()->with('status', ['info' => "Afdeling {$unit->name} opgeslagen!"]);
     }
 
     public function destroy(Unit $unit)

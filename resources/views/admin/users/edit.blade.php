@@ -4,13 +4,7 @@
 <div data-controller="modal">
     <div class="d-flex justify-content-between">
         <h3>Aanpassen {{ $user->name }}, {{ $user->id }}</h3>
-        @if($user->exists)
-            <form method="POST" action="{{ route('admin.users.destroy', $user) }}">
-                @method('DELETE')
-                @csrf
-                <button type="submit" class="btn btn-danger">Verwijderen <i class="fas fa-trash"></i></button>
-            </form>
-        @endif
+        <a class="btn btn-light" href="{{ route('admin.users.index') }}"><i class="fas fa-times"></i> Annuleren</a>
     </div>
 
     <form method="POST" action="{{ route('admin.users.update', $user) }}" class="mt-4">
@@ -18,7 +12,24 @@
         @csrf
         <div class="form-group row">
             <label for="name" class="col-form-label col-sm-2">Naam:</label>
-            <input type="text" class="form-control col-sm-10" id="name" name="name" value="{{ old('name', $user->name) }}">
+            <div class="col-sm-10 pl-0">
+                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-form-label col-sm-2">Login-methode:</div>
+            <div class="col-sm-10 d-flex align-items-center pl-0 justify-content-between">
+                @if($user->login == "internal")
+                    <span>E-mail:&nbsp;<em>{{ $user->email }}</em></span>
+                    @if(session('password'))
+                        <span>Gebruiker kan nu eenmalig inloggen met: <strong>{{ session('password') }}</strong></span>
+                    @else
+                        <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.users.reset', $user) }}"><i class="fas fa-key"></i> Wachtwoord resetten</a>
+                    @endif
+                @else
+                    curio.codes-account
+                @endif
+            </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="active">Actief:</label>
@@ -33,26 +44,31 @@
             <div class="col-sm-10 pl-0 pt-2">
                 <input type="hidden" name="admin" value="0">
                 <input type="checkbox" id="admin" name="admin" value="1" @if($user->admin) checked @endif>
-                <label for="admin">Globale admin (beheert gebruikers, afdelingen en opleidingen)</label>
+                <label for="admin">Globale admin (beheert afdelingen en gebruikers)</label>
             </div>
         </div>
 
-        <div class="d-flex justify-content-between mt-5">
+        <div class="d-flex justify-content-between mt-5 mb-3">
             <h4>Afdelingen van {{ $user->id }}</h4>
-            <button class="btn btn-light" data-action="click->modal#open"><i class="fas fa-search-plus"></i> Afdeling toevoegen</button>
+            <button class="btn btn-outline-primary" data-action="click->modal#open"><i class="fas fa-search-plus"></i> Afdeling toevoegen</button>
         </div>
         <table class="table table-striped table-hover table-sm mt-2">
             <tr>
                 <th>Afdeling</th>
                 <th>Lid</th>
+                <th>Importer</th>
                 <th>Co&ouml;rdinator</th>
             </tr>
             @foreach($user->units as $unit)
                 <tr>
-                    <td><a href="{{ route('admin.units.users.index', $unit) }}">{{ $unit->name }}</a></td>
+                    <td><a href="{{ route('admin.units.edit', $unit) }}">{{ $unit->name }}</a></td>
                     <td>
                         <input type="hidden" name="units[{{ $unit->id }}][member]" value="0">
                         <input type="checkbox" name="units[{{ $unit->id }}][member]" value="1" checked>
+                    </td>
+                    <td>
+                        <input type="hidden" name="units[{{ $unit->id }}][importer]" value="0">
+                        <input type="checkbox" name="units[{{ $unit->id }}][importer]" value="1" @if($unit->pivot->importer) checked @endif>
                     </td>
                     <td>
                         <input type="hidden" name="units[{{ $unit->id }}][coord]" value="0">
@@ -62,9 +78,15 @@
             @endforeach
         </table>
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">Opslaan <i class="fas fa-save"></i></button>
+        <div class="form-group d-flex justify-content-between">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Opslaan</button>
+            <button type="submit" class="btn btn-danger" form="delete" onclick="return confirm('test');"><i class="fas fa-trash"></i> Verwijderen</button>
         </div>
+    </form>
+
+    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" id="delete">
+        @method('DELETE')
+        @csrf
     </form>
 
     <!-- Modal units -->

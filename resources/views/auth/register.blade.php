@@ -42,6 +42,9 @@
                 <button type="submit" class="btn btn-primary mr-1">Account aanvragen</button>
             </form>
         </div>
+        <div class="col-md-6">
+            <div class="alert alert-info text-center">Aanvragen van een account is enkel beschikbaar voor medewerkers.</div>
+        </div>
     </div>
 
 @endsection

@@ -17,6 +17,7 @@ class CreateUnitUserTable extends Migration
             $table->id();
             $table->bigInteger('unit_id')->unsigned();
             $table->string('user_id');
+            $table->boolean('importer')->default(false);
             $table->boolean('coord')->default(false);
 
             $table->foreign('unit_id')

@@ -16,19 +16,21 @@ class LoginController extends Controller
     public function do(Request $request)
     {
         $request->validate([
-            'email'     => 'required|email|ends_with:@curio.nl',
+            'email'     => 'required',
             'password'  => 'required',
             'remember'  =>  'sometimes|boolean'
         ]);
 
+        $field = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'id';
+
         $is_authenticated = Auth::attempt(
-            ['email' => $request->email, 'password' => $request->password, 'active' => true],
+            [$field => $request->email, 'password' => $request->password, 'active' => true],
             $request->remember ?? false
         );
 
         if($is_authenticated)
         {
-            return redirect()->intended('home');
+            return redirect()->intended('/');
         }
 
         return redirect()->back()->with('status', ['warning' => 'Account niet gevonden of niet actief.']);

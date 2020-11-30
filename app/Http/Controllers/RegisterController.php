@@ -36,7 +36,7 @@ class RegisterController extends Controller
         $user->type = 'teacher';
         $user->login = 'internal';
         $user->password = Hash::make($request->password);
-        $user->active = false;
+        $user->active = -1;
         $user->save();
 
         $user->units()->attach($request->unit);

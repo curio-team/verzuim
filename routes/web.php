@@ -14,16 +14,16 @@ use App\Http\Controllers\ImportController;
 |
 */
 
-Route::middleware(["auth", "teacher"])->group(function () {
+Route::middleware(["auth", "teacher", "password_once"])->group(function () {
 
-    Route::get('/', 'GroupsController@home')->name('home');
+    Route::get('/', 'LadderController@home')->name('home');
 
     Route::view('about', 'about')->name('about');
 
     Route::prefix('groups')->name('groups.')->group(function () {
-        Route::get('/', 'GroupsController@index')->name('index');
-        Route::get('/{group}', 'GroupsController@show')->name('show');
-        Route::get('/favorite/{group}', 'GroupsController@favorite')->name('favorite');
+        Route::get('/', 'LadderController@index')->name('index');
+        Route::get('/{group}', 'LadderController@show')->name('show');
+        Route::get('/favorite/{group}', 'LadderController@favorite')->name('favorite');
     });
     
     Route::prefix('students')->name('students.')->group(function () {
@@ -31,32 +31,36 @@ Route::middleware(["auth", "teacher"])->group(function () {
         Route::get('/handle/{id}/{step}/{reason}', 'StudentsController@handle')->name('handle');
     });
 
-    // Route::middleware('admin')->group(function () {
+    Route::middleware('import')->prefix('import')->name('import.')->group(function () {
 
-    //     Route::prefix('import')->name('import.')->group(function () {
-    //         Route::get('/', 'ImportController@show')->name('show');
-    //         Route::post('/', 'ImportController@upload')->name('upload');
-    //     });
-    
-    //     Route::prefix('admins')->name('admins.')->group(function () {
-    //         Route::get('/', 'AdminsController@show')->name('show');
-    //         Route::post('/', 'AdminsController@save')->name('save');
-    //         Route::delete('/{code}', 'AdminsController@delete')->name('delete');
-    //     });
+        Route::get('/', 'ImportController@home')->name('home');
+        Route::get('{unit}', 'ImportController@show')->name('show');
+        Route::post('{unit}', 'ImportController@upload')->name('upload');
 
-    // });
+    });
+
+    Route::middleware('coord')->prefix('coord')->name('coord.')->group(function () {
+       
+        Route::redirect('/', '/coord/users')->name('home');
+        Route::get('users', 'CoordUserController@index')->name('users.index');
+        Route::get('requests', 'CoordUserController@requests')->name('users.requests');
+        Route::post('users/units', 'CoordUserController@units')->name('users.units');
+        Route::get('users/{user}', 'CoordUserController@edit')->name('users.edit');
+        Route::patch('users/{user}', 'CoordUserController@update')->name('users.update');
+        Route::get('users/{user}/reset', 'CoordUserController@reset')->name('users.reset');
+        Route::get('users/{user}/activate', 'CoordUserController@activate')->name('users.activate');
+
+    });
 
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
         Route::redirect('/', '/admin/units')->name('home');
-
         Route::resource('units', 'UnitController')->except('show');
-        Route::get('units/{unit}/users', 'UnitUserController@index')->name('units.users.index');
         Route::post('units/{unit}/users', 'UnitUserController@sync_unit')->name('units.users.sync');
-        Route::patch('units/{unit}/users', 'UnitUserController@update')->name('units.users.update');
         
         Route::resource('users', 'UserController')->except(['create', 'store', 'show']);
         Route::post('users/{user}/units', 'UnitUserController@sync_user')->name('users.units.sync');
+        Route::get('users/{user}/reset', 'UserController@reset')->name('users.reset');
 
     });
 

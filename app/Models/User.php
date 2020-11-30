@@ -37,11 +37,39 @@ class User extends Authenticatable
 
     public function units()
 	{
-		return $this->belongsToMany('App\Models\Unit')->withPivot('coord')->orderBy('name');
+		return $this->belongsToMany('App\Models\Unit')->withPivot(['importer', 'coord'])->orderBy('name');
 	}
 
-    public function getTeamAdminAttribute()
+    public function getCoordAttribute()
     {
+        foreach($this->units as $unit)
+        {
+            if($unit->pivot->coord) return true;
+        }
         return false;
+    }
+
+    public function getImporterAttribute()
+    {
+        foreach($this->units as $unit)
+        {
+            if($unit->pivot->importer) return true;
+        }
+        return false;
+    }
+
+    public function getMyCoordUnitsAttribute()
+    {
+        return $this->units()->where('coord', true)->get();
+    }
+
+    public function getMyImportUnitsAttribute()
+    {
+        return $this->units()->where('importer', true)->get();
+    }
+
+    public function getActiveAttribute($value)
+    {
+        return ($value > 0) ? true : false;
     }
 }

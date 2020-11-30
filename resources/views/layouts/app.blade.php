@@ -34,19 +34,17 @@
                             <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'groups')) active @endif">
                                 <a class="nav-link" href="{{ route('groups.index') }}">Klassen</a>
                             </li>
-                            @if(\Auth::user()->team_admin)
-                                <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'import')) active @endif">
-                                    <a class="nav-link" href="{{ route('import.show') }}">Import</a>
-                                </li>
-                                <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'admins')) active @endif">
-                                    <a class="nav-link" href="{{ route('admins.show') }}">Admins</a>
-                                </li>
-                            @endif
                         </ul>
                         <div class="btn-group d-none d-md-flex">
                             @yield('buttons')
+                            @if(\Auth::user()->importer)
+                                <a class="btn btn-outline-dark" href="{{ route('import.home') }}"><i class="fas fa-upload fa-fw"></i> Import</a>
+                            @endif
+                            @if(\Auth::user()->coord)
+                                <a class="btn btn-outline-dark" href="{{ route('coord.home') }}"><i class="fas fa-wrench fa-fw"></i> Co&ouml;rdinator</a>
+                            @endif
                             @if(\Auth::user()->admin)
-                                <a class="btn btn-outline-dark" href="{{ route('admin.home') }}"><i class="fas fa-users-cog fa-fw"></i></a>
+                                <a class="btn btn-outline-dark" href="{{ route('admin.home') }}"><i class="fas fa-user-shield fa-fw"></i> Admin</a>
                             @endif
                             <a class="btn btn-outline-dark" href="{{ route('settings.show') }}"><i class="fas fa-cog fa-fw"></i></a>
                             <a class="btn btn-outline-dark" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt fa-fw"></i></a>
@@ -55,6 +53,8 @@
                 @endif
             </div>
         </nav>
+        @includeWhen(Str::startsWith(Route::current()->uri, 'import'), 'import.nav')
+        @includeWhen(Str::startsWith(Route::current()->uri, 'coord'), 'coord.nav')
         @includeWhen(Str::startsWith(Route::current()->uri, 'admin'), 'admin.nav')
         <div class="@yield('container', 'container mt-3')">
             @include('layouts.status')

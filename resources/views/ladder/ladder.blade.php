@@ -1,6 +1,6 @@
 <div class="ladder">
     <div class="title">
-        <h3>{{ $group["name"] }}</h3>
+        <h3>{{ $group }}</h3>
         <?php
         $format = "%a %e %b";
         if($then->format("Y") != $now->format("Y")) $format .= " %Y"

@@ -9,7 +9,6 @@
         @foreach($units as $unit)
             <tr>
                 <td>{{ $unit->name }}</td>
-                <td><a href="{{ route('admin.units.users.index', $unit) }}"><i class="fas fa-fw fa-users"></i> Gebruikers</a></td>
                 <td><a href="{{ route('admin.units.edit', $unit) }}"><i class="fas fa-fw fa-edit"></i> Aanpassen</a></td>
             </tr>
         @endforeach

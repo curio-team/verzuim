@@ -7,56 +7,86 @@ use \StudioKaa\Amoclient\Facades\AmoAPI;
 use Carbon\Carbon;
 use DB;
 
-class GroupsController extends Controller
+class LadderController extends Controller
 {
     public function index()
     {
-        $user_id = \Auth::user()->id;
-        $groups = AmoAPI::get('groups')->reject(function ($group) {
-            return ($group["type"] != "class");
+        $user = \Auth::user();
+        if($user->login == "amoclient")
+        {
+            $groups = AmoAPI::get('groups')->reject(function ($group) {
+                return ($group["type"] != "class");
+            });
+        }
+        else
+        {
+            $start = Carbon::today()->startOfWeek()->subDays(7);
+            $units = \Auth::user()->units->pluck('id');
+            $groups = DB::table('logs')
+                        ->select('group_name as name')
+                        ->distinct()
+                        ->whereIn('unit_id', $units)
+                        ->whereBetween('date', [$start->format("Y-m-d"), Carbon::now()->format("Y-m-d")])
+                        ->orderBy('group_name')
+                        ->get('group_name');            
+        }
+
+        $groups = $groups->map(function ($item) {
+            return collect($item);
         });
-
-        $favorites = DB::table('group_user')->where('user_id', $user_id)->get()->pluck('group_id');
-
+        
+        $favorites = DB::table('group_user')->where('user_id', $user->id)->get()->pluck('group_name');
         return view('groups.index')
                 ->with(compact('favorites'))  
                 ->with(compact('groups'));   
     }
 
-    public function show($id)
+    public function show($name)
     {
-        $group = AmoAPI::get('groups/' . $id);
-        $students = collect($group["users"]);
-        $ids = $students->pluck("id")->map(function ($item) {
-            return preg_replace("/[^0-9]/", "", $item);
-        });
+        $user = \Auth::user();
+        if($user->login == "amoclient")
+        {
+            $group = AmoAPI::get('groups/find/' . $name);
+            $students = collect($group["users"]);
+            $ids = $students->pluck("id")->map(function ($item) {
+                return preg_replace("/[^0-9]/", "", $item);
+            });
+        }
+        else
+        {
+            $start = Carbon::today()->startOfWeek()->subDays(7);
+            $ids = DB::table('logs')
+                        ->select('student_id')
+                        ->distinct()
+                        ->where('group_name', $name)
+                        ->whereBetween('date', [$start->format("Y-m-d"), Carbon::now()->format("Y-m-d")])
+                        ->get('student_id')
+                        ->pluck('student_id');
+        }
 
-        //Get date of four weeks ago (counted from last monday)
         $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
-
         $students = $this->ladder($date, $ids);
 
         return view('ladder.show')
                 ->with(compact('students'))
-                ->with(compact('group'))
+                ->with('group', $name)
                 ->with('now', Carbon::today())
                 ->with('then', $date);
     }
 
-    public function favorite($id)
+    public function favorite($name)
     {
         $user_id = \Auth::user()->id;
-        $count = DB::table('group_user')->where([['user_id', $user_id], ['group_id', $id]])->count();
-        $group = $group = AmoAPI::get('groups/' . $id)["name"];
+        $count = DB::table('group_user')->where([['user_id', $user_id], ['group_name', $name]])->count();
         if($count > 0)
         {
-            DB::table('group_user')->where([['user_id', $user_id], ['group_id', $id]])->delete();
-            $msg = ['danger' => 'Groep ' . $group . ' is niet langer favoriet.'];
+            DB::table('group_user')->where([['user_id', $user_id], ['group_name', $name]])->delete();
+            $msg = ['danger' => 'Groep ' . $name . ' is niet langer favoriet.'];
         }
         else
         {
-            DB::table('group_user')->insert(['user_id' => $user_id, 'group_id' => $id]);
-            $msg = ['success' => 'Groep ' . $group . ' is nu als favoriet zichtbaar op de homepage.'];
+            DB::table('group_user')->insert(['user_id' => $user_id, 'group_name' => $name]);
+            $msg = ['success' => 'Groep ' . $name . ' is nu als favoriet zichtbaar op de homepage.'];
         }
 
         return redirect()->back()->with('status', $msg);
@@ -64,30 +94,40 @@ class GroupsController extends Controller
 
     public function home()
     {
-        $user_id = \Auth::user()->id;
-        $groups = DB::table('group_user')->where('user_id', $user_id)->orderBy('group_id')->get()->pluck('group_id');
-        if($groups->count() < 1)
-        {
-            return $this->index();
-        }
+        $user = \Auth::user();
+        $groups = DB::table('group_user')->where('user_id', $user->id)->orderBy('group_name')->get()->pluck('group_name');
+        if($groups->count() < 1) return $this->index();
 
         $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
         $data = array();
 
-        foreach ($groups as $group_id)
+        foreach ($groups as $group_name)
         {
-            $group = AmoAPI::get('groups/' . $group_id);
-            $students = collect($group["users"]);
-            $ids = $students->pluck("id")->map(function ($item) {
-                return substr($item, 1);
-            });
+            if($user->login == "amoclient")
+            {
+                $group = AmoAPI::get('groups/find/' . $group_name);
+                $students = collect($group["users"]);
+                $ids = $students->pluck("id")->map(function ($item) {
+                    return preg_replace("/[^0-9]/", "", $item);
+                });
+            }
+            else
+            {
+                $start = Carbon::today()->startOfWeek()->subDays(7);
+                $ids = DB::table('logs')
+                            ->select('student_id')
+                            ->distinct()
+                            ->where('group_name', $group_name)
+                            ->whereBetween('date', [$start->format("Y-m-d"), Carbon::now()->format("Y-m-d")])
+                            ->get('student_id')
+                            ->pluck('student_id');
+            }
+
             $data[] = array(
-                "group" => $group,
+                "group" => $group_name,
                 "students" => $this->ladder($date, $ids)
             );
         }
-
-        #return $data;
 
         return view('ladder.home')
                 ->with(compact('data'))

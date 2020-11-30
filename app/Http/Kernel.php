@@ -64,5 +64,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'teacher' => \App\Http\Middleware\Teacher::class,
         'admin' => \App\Http\Middleware\Admin::class,
+        'coord' => \App\Http\Middleware\Coord::class,
+        'import' => \App\Http\Middleware\Import::class,
+        'password_once' => \App\Http\Middleware\PasswordReset::class,
     ];
 }

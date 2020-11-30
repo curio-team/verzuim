@@ -11,8 +11,8 @@
             <form class="flex-grow-1" method="POST" action="{{ route('login.do.internal') }}">
                 @csrf
                 <div class="form-group">
-                    <label for="email">E-mailadres:</label>
-                    <input type="email" class="form-control" id="email" name="email">
+                    <label for="email">E-mailadres of docent-code:</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="ab01">
                 </div>
                 <div class="form-group">
                     <label for="password">Wachtwoord:</label>
@@ -23,8 +23,7 @@
                     <label class="form-check-label" for="remember">Onthoud mij</label>
                 </div>
                 <button type="submit" class="btn btn-primary mr-1">Login</button>
-                <a class="btn btn-secondary mr-1" href="{{ route('register') }}">Registreren</a>
-                <a class="btn btn-light">Wachtwoord vergeten</a>
+                <a class="btn btn-light mr-1" href="{{ route('register') }}">Account aanvragen</a>
             </form>
         </div>
 

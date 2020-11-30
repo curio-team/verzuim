@@ -8,6 +8,9 @@
             <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'admin/users')) active @endif">
                 <a class="nav-link" href="{{ route('admin.users.index') }}">Gebruikers</a>
             </li>
+            <li class="nav-item @if(Str::startsWith(Route::current()->uri, 'admin/students')) active @endif">
+                <a class="nav-link" href="{{ route('admin.students.index') }}">Studenten</a>
+            </li>
         </ul>
     </div>
 </nav>

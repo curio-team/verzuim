@@ -11,8 +11,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::where('type', 'teacher')->get();
         return view('admin.users.index')
+                ->with(compact('users'));
+    }
+
+    public function students()
+    {
+        $users = User::where('type', 'student')->get();
+        return view('admin.users.students')
                 ->with(compact('users'));
     }
 

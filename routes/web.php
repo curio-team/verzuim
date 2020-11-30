@@ -62,6 +62,8 @@ Route::middleware(["auth", "teacher", "password_once"])->group(function () {
         Route::post('users/{user}/units', 'UnitUserController@sync_user')->name('users.units.sync');
         Route::get('users/{user}/reset', 'UserController@reset')->name('users.reset');
 
+        Route::get('students', 'UserController@students')->name('students.index');
+
     });
 
     Route::prefix('settings')->name('settings.')->group(function () {

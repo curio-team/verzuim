@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\Admin::class,
         'coord' => \App\Http\Middleware\Coord::class,
         'import' => \App\Http\Middleware\Import::class,
+        'active' => \App\Http\Middleware\Active::class,
         'password_once' => \App\Http\Middleware\PasswordReset::class,
     ];
 }

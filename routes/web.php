@@ -14,7 +14,7 @@ use App\Http\Controllers\ImportController;
 |
 */
 
-Route::middleware(["auth", "teacher", "password_once"])->group(function () {
+Route::middleware(["auth", "teacher", "password_once", "active"])->group(function () {
 
     Route::get('/', 'LadderController@home')->name('home');
     Route::view('about', 'about')->name('about');
@@ -74,7 +74,7 @@ Route::middleware(["auth", "teacher", "password_once"])->group(function () {
 
 });
 
-Route::middleware("auth")->group(function () {
+Route::middleware(["auth", "active"])->group(function () {
     Route::get('/me', 'StudentsController@me')->name('home.student');
 });
 

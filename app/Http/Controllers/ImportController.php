@@ -39,9 +39,11 @@ class ImportController extends Controller
             return redirect()->back()->with('status', ['warning' => "Geen toestemming om voor deze afdeling toe importeren."]);
         }
 
-        $date =  $this->getDate($unit, "2000-01-01");
+        $dateLower =  $this->getDate($unit, "2000-01-01");
+        $dateUpper = $request->today ? Carbon::today() : Carbon::yesterday();
+
         $count1 = DB::table("logs")->count();
-        Excel::import(new LogsImport($date, $unit->id), request()->file('file'));
+        Excel::import(new LogsImport($dateLower, $dateUpper, $unit->id), request()->file('file'));
         $count2 = DB::table("logs")->count();
         $diff = $count2 - $count1;
 
@@ -55,6 +57,7 @@ class ImportController extends Controller
 
     private function getDate($unit, $default = null)
     {
+        $today = Carbon::today();
         $date = Log::where('unit_id', $unit->id)->max('date');
         if($date == null)
         {
@@ -63,7 +66,7 @@ class ImportController extends Controller
         }
 
         $date = Carbon::createFromFormat("!Y-m-d", $date);
-        if($date->greaterThanOrEqualTo(Carbon::today())) return Carbon::today();
+        if($date->greaterThanOrEqualTo(Carbon::today())) return $today;
 
         return $date;
     }

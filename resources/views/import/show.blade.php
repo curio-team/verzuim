@@ -19,6 +19,14 @@
                 {{ $unit->name }}
             </div>
         </div>
+        <div class="form-group row">
+            <label class="col-sm-2" for="today">Importeer vandaag:</label>
+            <div class="col-sm-10">
+                <input type="checkbox" id="today" name="today" value="1">
+                <label for="today" class="mb-0">Importeer ook registraties van vandaag</label>
+                <small class="form-text">Let wel: dit kan slechts <em>eenmaal</em> per dag. Wanneer je in de ochtend dit vinkje zet, kun je gedurende de dag dus geen nieuwe import voor vandaag meer doen. Dat kan pas de volgende dag. Gebruik dit vinkje dus liefst pas aan het einde van de dag.</small>
+            </div>
+        </div>
         <div class="form-group my-4">
             <button type="submit" class="btn btn-success btn-lg">Importeren <i class="fas fa-cloud-upload-alt"></i></button>
         </div>

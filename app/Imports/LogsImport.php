@@ -10,19 +10,22 @@ use Carbon\Carbon;
 
 class LogsImport implements ToModel, WithHeadingRow
 {
-    private $check_date = null;
+    private $dateLower = null;
+    private $dateUpper = null;
     private $unit_id = null;
 
-    public function __construct($date, $unit)
+    public function __construct($dateLower, $dateUpper, $unit)
     {
-        $this->check_date = $date;
+        $this->dateLower = $dateLower;
+        $this->dateUpper = $dateUpper;
         $this->unit_id = $unit;
     }
 
     public function model(array $row)
     {
         $date = Carbon::createFromFormat("!d-m-Y", $row['datumvan']);
-        if($date->lessThanOrEqualTo($this->check_date)) return;
+        if($date->lessThanOrEqualTo($this->dateLower)) return;
+        if($date->greaterThan($this->dateUpper)) return;
         
         $duration = ($row['lesuureind'] - $row['lesuurbegin'] + 1) / 2;
 

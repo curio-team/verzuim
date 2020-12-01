@@ -35,7 +35,7 @@ class UnitController extends Controller
     {
         return view('admin.units.edit')
                 ->with(compact('unit'))
-                ->with('users', User::all());
+                ->with('users', User::where('type', 'teacher')->get());
     }
 
     public function update(Request $request, Unit $unit)

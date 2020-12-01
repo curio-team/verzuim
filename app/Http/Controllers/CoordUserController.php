@@ -89,6 +89,17 @@ class CoordUserController extends Controller
         return redirect()->back()->with('status', ['success' => "Gebruiker {$user->id} is geactiveerd."]);
     }
 
+    public function deny(User $user)
+    {
+        if($this->cant_edit($user))
+        {
+            return redirect()->back()->with('status', ['warning' => "Gebruiker {$user->id} valt niet onder een afdeling waar van jij coordinator bent."]);
+        }
+
+        $user->delete();
+        return redirect()->back()->with('status', ['success' => "Gebruiker {$user->id} is verwijderd."]);
+    }
+
     public function units(Request $request)
     {
         $request->validate([

@@ -10,10 +10,16 @@
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->units->implode('name', ', ') }}</td>
                 <td>
-                    <a class="btn btn-sm btn-outline-primary" href="{{ route('coord.users.activate', $user) }}">
-                        <i class="fas fa-lock-open"></i>
-                        Gebruiker activeren
-                    </a>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-outline-primary" href="{{ route('coord.users.activate', $user) }}">
+                            <i class="fas fa-lock-open"></i>
+                            Activeren
+                        </a>
+                        <a class="btn btn-sm btn-outline-danger" href="{{ route('coord.users.deny', $user) }}">
+                            <i class="fas fa-times"></i>
+                            Afwijzen
+                        </a>
+                    </div>
                 </td>
             </tr>
         @empty

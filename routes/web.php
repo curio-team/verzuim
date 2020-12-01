@@ -48,6 +48,7 @@ Route::middleware(["auth", "teacher", "password_once", "active"])->group(functio
         Route::patch('users/{user}', 'CoordUserController@update')->name('users.update');
         Route::get('users/{user}/reset', 'CoordUserController@reset')->name('users.reset');
         Route::get('users/{user}/activate', 'CoordUserController@activate')->name('users.activate');
+        Route::get('users/{user}/deny', 'CoordUserController@deny')->name('users.deny');
 
     });
 

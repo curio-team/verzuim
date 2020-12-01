@@ -18,7 +18,7 @@ class SettingsController extends Controller
     public function save(Request $request)
     {
         $request->validate([
-            'password'  => 'sometimes|confirmed|between:6,1000'
+            'password'  => 'nullable|confirmed|between:6,1000'
         ]);
 
         $user = User::find(\Auth::user()->id);

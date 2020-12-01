@@ -10,7 +10,7 @@
     <div class="step step1">
         <div class="step-text">
             <p class="text-muted m-0">Fase 1</p>
-            <p class="font-weight-bold m-0">Indicentele melding</p>
+            <p class="font-weight-bold m-0">Incidentele melding</p>
             <p class="m-0">Informeel contact</p>
         </div>
     </div>

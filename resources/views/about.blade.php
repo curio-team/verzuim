@@ -50,8 +50,10 @@
             <p class="mt-4 mb-0"><strong>Details van een melding</strong></p>
             <p>Door op de <em>naam</em> van een student te klikken bekijk je alle registraties van de afgelopen periode.</p>
 
-            <p class="mt-4 mb-0"><strong>Inloggen voor student</strong></p>
-            <p>De student kan zelf ook inloggen en ziet dan ongeveer het zelfde scherm als wanneer je als docent de details bekijkt van die student. Studenten hebben geen verdere mogelijkheden in de applicatie.</p>
+            @if(\Auth::user()->login == 'amoclient')
+                <p class="mt-4 mb-0"><strong>Inloggen voor student</strong></p>
+                <p>De student kan zelf ook inloggen en ziet dan ongeveer het zelfde scherm als wanneer je als docent de details bekijkt van die student. Studenten hebben geen verdere mogelijkheden in de applicatie.</p>
+            @endif
         </div>
     </div>
 @endsection

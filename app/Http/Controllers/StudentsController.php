@@ -21,11 +21,20 @@ class StudentsController extends Controller
     {
         if($student == null)
         {
-            try{
-                $student = AmoAPI::get('users/i' . $id);
-            }
-            catch(\GuzzleHttp\Exception\ClientException $e){
-                $student = AmoAPI::get('users/D' . $id);
+            if(\Auth::user()->login == "amoclient")
+                try{
+                    $student = AmoAPI::get('users/i' . $id);
+                }
+                catch(\GuzzleHttp\Exception\ClientException $e){
+                    $student = AmoAPI::get('users/D' . $id);
+                }
+            else
+            {
+                $student["name"] = DB::table('logs')
+                                        ->select('student_name')
+                                        ->distinct()
+                                        ->where('student_id', $id)
+                                        ->value('student_name');
             }
         }
         

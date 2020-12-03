@@ -41,6 +41,6 @@ class RegisterController extends Controller
 
         $user->units()->attach($request->unit);
 
-        return redirect()->back()->with('status', ['success' => 'Account aangevraagd - wacht op goedkeuring.']);
+        return redirect()->back()->with('status', ['success' => 'Account aangevraagd - contacteer je teamcoordinator voor goedkeuring.']);
     }
 }

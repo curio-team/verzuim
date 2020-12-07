@@ -40,7 +40,7 @@ class ImportController extends Controller
         }
 
         $dateLower =  $this->getDate($unit, "2000-01-01");
-        $dateUpper = $request->today ? Carbon::today() : Carbon::yesterday();
+        $dateUpper = Carbon::yesterday();
 
         $count1 = DB::table("logs")->count();
         Excel::import(new LogsImport($dateLower, $dateUpper, $unit->id), request()->file('file'));

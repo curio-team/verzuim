@@ -3,7 +3,7 @@
 
     <h3>Importeer data voor {{ $unit->name }}</h3>
     <p>Let op; uit het bestand worden enkel registratie ge&iuml;mporteerd die vallen <em>na</em> de laatste datum die nu is opgenomen in het systeem. Dit om dubbele imports te voorkomen. Importeer dus altijd een databestand voor alle klassen in een keer, je kunt niet later alsnog gegevens van een andere klas importeren.</p>
-    <p><a href="https://portal.rocwb.nl/ReportServer?/PARS/platte_data&rs:Command=Render&rc:Parameters=true" target="_blank">Download rapportage uit PARS als CSV <i class="fas fa-external-link-alt"></i></a></p>
+    <p><a href="https://ssrs01.curio.nl/ReportServer/Pages/ReportViewer.aspx?/PARS/platte_data" target="_blank">Download rapportage uit PARS als CSV <i class="fas fa-external-link-alt"></i></a></p>
     <div class="alert alert-info">Data ge&iuml;mporteerd voor <strong>{{ $unit->name }}</strong> tot en met: <strong>{{ $last }}</strong>.</div>
     <form method="POST" action="{{ route('import.upload', $unit) }}" enctype="multipart/form-data">
         @csrf

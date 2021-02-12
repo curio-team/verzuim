@@ -53,6 +53,7 @@ class LadderController extends Controller
             catch (Exception $e)
             {
                 return redirect()->back()->with('status', ['danger' => 'Groep ' . $name . ' bevat geen studenten!']);
+                exit();
             }
             $students = collect($group["users"]);
             $ids = $students->pluck("id")->map(function ($item) {

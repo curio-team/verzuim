@@ -46,16 +46,14 @@ class LadderController extends Controller
         $user = \Auth::user();
         if($user->login == "amoclient")
         {
-            try
-            {
-                $group = AmoAPI::get('groups/find/' . $name);
-            }
-            catch (\Throwable $e)
+            $group = AmoAPI::get('groups/find/' . $name);
+            $students = collect($group["users"]);
+            if(count($students) < 1)
             {
                 return redirect()->back()->with('status', ['danger' => 'Groep ' . $name . ' bevat geen studenten!']);
                 exit();
             }
-            $students = collect($group["users"]);
+
             $ids = $students->pluck("id")->map(function ($item) {
                 return preg_replace("/[^0-9]/", "", $item);
             });

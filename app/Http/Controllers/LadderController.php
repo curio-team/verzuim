@@ -50,7 +50,7 @@ class LadderController extends Controller
             {
                 $group = AmoAPI::get('groups/find/' . $name);
             }
-            catch (Exception $e)
+            catch (\Throwable $e)
             {
                 return redirect()->back()->with('status', ['danger' => 'Groep ' . $name . ' bevat geen studenten!']);
                 exit();

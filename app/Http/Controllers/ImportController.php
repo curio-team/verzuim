@@ -36,7 +36,7 @@ class ImportController extends Controller
 
         if(!\Auth::user()->my_import_units->pluck("id")->contains($unit->id))
         {
-            return redirect()->back()->with('status', ['warning' => "Geen toestemming om voor deze afdeling toe importeren."]);
+            return redirect()->back()->with('status', ['warning' => "Geen toestemming om voor deze afdeling te importeren."]);
         }
 
         $dateLower =  $this->getDate($unit, "2000-01-01");

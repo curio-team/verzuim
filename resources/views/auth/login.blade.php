@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-md-6 d-flex align-items-center flex-column">
-            <p class="text-muted">Login met curio.codes:</p>
+            <p class="text-muted" style="font-weight: bold">Login met curio.codes:</p>
             <a class="btn btn-lg btn-light btn-curio" href="{{ route('login.do.amoclient') }}"><img src="Curio-software-developers-klein.png" alt="curio.codes"></a>
         </div>
     </div>

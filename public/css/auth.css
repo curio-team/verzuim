@@ -11,6 +11,11 @@
 
 .btn-curio{
     padding: 2rem 3rem;
+    background-color: #D6E3DF;
+}
+
+.btn-curio:hover{
+    background-color: #64968F !important;
 }
 
 .btn-curio img{

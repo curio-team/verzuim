@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use \StudioKaa\Amoclient\Facades\AmoAPI;
 use Carbon\Carbon;
 use DB;
+use App\Models\Unit;
 
 class LadderController extends Controller
 {
@@ -70,6 +71,14 @@ class LadderController extends Controller
                         ->pluck('student_id');
         }
 
+        $unit = DB::table('logs')
+                    ->select('unit_id')
+                    ->where('group_name', $name)
+                    ->first();
+        $unit = Unit::find($unit->unit_id);
+        $last = ImportController::getDate($unit);
+        $last = $last ? $last->formatLocalized('%a %e %b') : "(nog nooit)";
+
         $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
         $students = $this->ladder($date, $ids);
 
@@ -77,7 +86,8 @@ class LadderController extends Controller
                 ->with(compact('students'))
                 ->with('group', $name)
                 ->with('now', Carbon::today())
-                ->with('then', $date);
+                ->with('then', $date)
+                ->with(compact('last'));
     }
 
     public function favorite($name)
@@ -129,12 +139,21 @@ class LadderController extends Controller
                             ->pluck('student_id');
             }
 
+            $unit = DB::table('logs')
+                    ->select('unit_id')
+                    ->where('group_name', $group_name)
+                    ->first();
+            $unit = Unit::find($unit->unit_id);
+            $last = ImportController::getDate($unit);
+            $last = $last ? $last->formatLocalized('%a %e %b') : "(nog nooit)";
+
             $data[] = array(
                 "group" => $group_name,
-                "students" => $this->ladder($date, $ids)
+                "students" => $this->ladder($date, $ids),
+                "last" => $last
             );
         }
-
+        
         return view('ladder.home')
                 ->with(compact('data'))
                 ->with('now', Carbon::today())

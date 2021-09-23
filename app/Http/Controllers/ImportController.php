@@ -21,7 +21,7 @@ class ImportController extends Controller
     public function show(Unit $unit)
     {
         $last = Log::where('unit_id', $unit->id)->max('date');
-        $last = $this->getDate($unit);
+        $last = self::getDate($unit);
         $last = $last ? $last->format('d-m-Y') : "(nog nooit)";
         return view('import.show')
                 ->with(compact('last'))
@@ -55,7 +55,7 @@ class ImportController extends Controller
 
 
 
-    private function getDate($unit, $default = null)
+    public static function getDate($unit, $default = null)
     {
         $today = Carbon::today();
         $date = Log::where('unit_id', $unit->id)->max('date');

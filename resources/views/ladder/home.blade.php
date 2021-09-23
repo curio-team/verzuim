@@ -14,6 +14,7 @@
         @include('ladder.ladder', [
             "students" => $item["students"],
             "group" => $item["group"],
+            "last" => $item["last"],
             "now" => $now,
             "then" => $then
         ])

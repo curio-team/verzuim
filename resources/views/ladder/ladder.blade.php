@@ -5,7 +5,7 @@
         $format = "%a %e %b";
         if($then->format("Y") != $now->format("Y")) $format .= " %Y"
         ?>
-        <p class="text-muted m-0">{{ $then->formatLocalized($format) }} t/m {{ $now->formatLocalized($format) }}</p>
+        <p class="text-muted m-0">{{ $then->formatLocalized($format) }} t/m {{ $now->formatLocalized($format) }} (laatste import: {{ $last }})</p>
     </div>
     <div class="step step1">
         <div class="step-text">

@@ -208,8 +208,8 @@ class LadderController extends Controller
                 5 => ["num" => 12, "func" => "count"],
                 4 => ["num" => 8,  "func" => "count"],
                 3 => ["num" => 4,  "func" => "count"],
-                2 => ["num" => 2,  "func" => "count"],
-                1 => ["num" => 0,  "func" => "count"],
+                2 => ["num" => 3,  "func" => "count"],
+                1 => ["num" => 1,  "func" => "count"],
             );
             $this->process("Te laat", $students, $name, $nums, $thresholdsTL);
 

@@ -184,6 +184,17 @@ class LadderController extends Controller
             $students[$name]["reason"] = null;
             $students[$name]["handled"] = array(1 => false, 2 => false, 3 => false, 4 => false, 5 => false);
 
+            // Threshold = de ondergrens waarBOVEN het niet meer oké is
+
+            $thresholdsZ = array(
+                5 => ["num" => 8,   "func" => "count"],
+                4 => ["num" => 5,   "func" => "count"],
+                3 => ["num" => 3,   "func" => "count"],
+                2 => ["num" => 2,   "func" => "count"],
+                1 => ["num" => 1,   "func" => "count"],
+            );
+            $this->process("Ziek", $students, $name, $nums, $thresholdsZ);
+
             $thresholdsRA = array(
                 5 => ["num" => 100, "func" => "count"],
                 4 => ["num" => 100, "func" => "count"],
@@ -197,8 +208,8 @@ class LadderController extends Controller
                 5 => ["num" => 12, "func" => "count"],
                 4 => ["num" => 8,  "func" => "count"],
                 3 => ["num" => 4,  "func" => "count"],
-                2 => ["num" => 3,  "func" => "count"],
-                1 => ["num" => 1,  "func" => "count"],
+                2 => ["num" => 2,  "func" => "count"],
+                1 => ["num" => 0,  "func" => "count"],
             );
             $this->process("Te laat", $students, $name, $nums, $thresholdsTL);
 
@@ -210,7 +221,10 @@ class LadderController extends Controller
                 1 => ["num" => 0,  "func" => "count"],
             );
             $this->process("Absent", $students, $name, $nums, $thresholdsOA);
+
         }
+
+        // dd($students);
 
         return $students;
     }
@@ -233,8 +247,11 @@ class LadderController extends Controller
                 //Als het aantal hoger is dan threshold
                 if($nums[$type]->$func > $num)
                 {
-                    $students[$name]["step"] = $i;
-                    $students[$name]["reason"] = $type;
+                    if($students[$name]["step"] < $i)
+                    {
+                        $students[$name]["step"] = $i;
+                        $students[$name]["reason"] = $type;
+                    }
 
                     //Als het aantal afgehandelde registraties gelijk is aan het aantal "verzoorzakende" registraties
                     if($nums[$type]->$handled >= $nums[$type]->count)

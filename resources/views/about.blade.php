@@ -10,6 +10,7 @@
                 <li>&gt;0 melding(en) Absent</li>
                 <li>&gt;1 melding(en) Te laat</li>
                 <li>&gt;1 melding(en) Regulier absent</li>
+                <li>&gt;1 melding(en) Ziek</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 2</strong></p>
@@ -17,6 +18,7 @@
                 <li>&gt;1 melding(en) Absent</li>
                 <li>&gt;3 melding(en) Te laat</li>
                 <li>&gt;2 melding(en) Regulier absent</li>
+                <li>&gt;2 melding(en) Ziek</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 3</strong></p>
@@ -24,21 +26,27 @@
                 <li>&gt;2 melding(en) Absent</li>
                 <li>&gt;4 melding(en) Te laat</li>
                 <li>&gt;4 melding(en) Regulier absent</li>
+                <li>&gt;3 melding(en) Ziek</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 4</strong></p>
             <ul>
                 <li>&gt;12 uren Absent</li>
                 <li>&gt;8 melding(en) Te laat</li>
+                <li>&gt;5 melding(en) Ziek</li>
             </ul>
 
             <p class="mt-4"><strong>Fase 5</strong></p>
             <ul>
                 <li>&gt;16 uren Absent</li>
                 <li>&gt;12 melding(en) Te laat</li>
+                <li>&gt;8 melding(en) Ziek</li>
             </ul>
         </div>
         <div>
+            <p class="mt-4 mb-0"><strong>Let op; ziekmeldingen</strong></p>
+            <p>De verzuimladder kan alleen het <em>aantal</em> ziekmeldingen bijhouden. Studenten die langdurig ziek zijn verschijnen dus niet op de ladder!</p>
+            
             <p class="mt-4 mb-0"><strong>Het <em>voortschrijdend venster</em>-principe</strong></p>
             <p>De voorgestelde situatie op de ladder is gebaseerd op de huidige week en de X weken daarvoor (standaard is 4 weken). Hierdoor kijk je steeds naar de situatie van het nabije verleden, wat er voor zorgt dat studenten ook weer naar beneden kunnen stappen op de ladder als het beter gaat.</p>
             <p>Stel dat student A in de afgelopen weken veel afwezig is geweest, en daardoor op trede drie of vier is beland. Daarop maak je afspraken met A over verbetering. In de komende weken zullen de oude absenties uit beeld verdwijnen door het vooruitlopende venster. Als de afpraken werken en er geen <em>nieuwe</em> absentie ontstaat, zal de student dus dalen op de ladder.</p>

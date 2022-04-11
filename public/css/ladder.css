@@ -160,9 +160,8 @@ a.link-icon:hover i{
 .formStart{
     color: gray;
     grid-row: 1;
-    grid-column: 3 / span 3;
+    grid-column: 3 / span 2;
     z-index: 100;
-    text-align: right;    
 }
 
 .formStart > input{

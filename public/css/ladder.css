@@ -156,3 +156,20 @@ a.link-icon:hover i{
     margin-top: 1rem;
     margin-left: 1rem;
 }
+
+.formStart{
+    color: gray;
+    grid-row: 1;
+    grid-column: 3 / span 3;
+    z-index: 100;
+    text-align: right;    
+}
+
+.formStart > input{
+    width: 100px;
+    text-align: center;
+}
+
+.formStart > input[type=submit]{
+    color: gray;
+}

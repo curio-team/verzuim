@@ -1,4 +1,9 @@
 <div class="ladder">
+    <form action="" method="get" class="formStart">
+        <span>Bekijk ziekmeldingen vanaf:</span>
+        <input type="text" name="start" placeholder="1900-01-31" @if(isset($_GET['start'])) value="{{$_GET['start'] }}" @endif>
+        <input type="submit">
+    </form>
     <div class="title">
         <h3>{{ $group }}</h3>
         <?php

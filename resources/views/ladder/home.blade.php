@@ -16,7 +16,10 @@
             "group" => $item["group"],
             "last" => $item["last"],
             "now" => $now,
-            "then" => $then
+            "then" => $then,
+            "sickWeek" => $item["sickWeek"],
+            "sick3x" => $item["sick3x"],
+            "sick5x" => $item["sick5x"]
         ])
         @if(!$loop->last) <hr class="my-5" style="border-top: 7px solid gray"> @endif
     @endforeach

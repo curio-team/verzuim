@@ -42,52 +42,20 @@ class LadderController extends Controller
                 ->with(compact('groups'));   
     }
 
-    public function show($name)
+    public function show($name, Request $request)
     {
-        $user = \Auth::user();
-        if($user->login == "amoclient")
-        {
-            $group = AmoAPI::get('groups/find/' . $name);
-            $students = collect($group["users"]);
-            if(count($students) < 1)
-            {
-                return redirect()->back()->with('status', ['danger' => 'Groep ' . $name . ' bevat geen studenten!']);
-                exit();
-            }
-
-            $ids = $students->pluck("id")->map(function ($item) {
-                return preg_replace("/[^0-9]/", "", $item);
-            });
-        }
-        else
-        {
-            $start = Carbon::today()->startOfWeek()->subDays(7);
-            $ids = DB::table('logs')
-                        ->select('student_id')
-                        ->distinct()
-                        ->where('group_name', $name)
-                        ->whereBetween('date', [$start->format("Y-m-d"), Carbon::now()->format("Y-m-d")])
-                        ->get('student_id')
-                        ->pluck('student_id');
-        }
-
-        $unit = DB::table('logs')
-                    ->select('unit_id')
-                    ->where('group_name', $name)
-                    ->first();
-        $unit = Unit::find($unit->unit_id);
-        $last = ImportController::getDate($unit);
-        $last = $last ? $last->formatLocalized('%a %e %b') : "(nog nooit)";
-
+        $data = $this->getOneLadder($name, $request);
         $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
-        $students = $this->ladder($date, $ids);
 
         return view('ladder.show')
-                ->with(compact('students'))
+                ->with('students', $data[0])
                 ->with('group', $name)
                 ->with('now', Carbon::today())
                 ->with('then', $date)
-                ->with(compact('last'));
+                ->with('last', $data[1])
+                ->with('sickWeek', $data[2])
+                ->with('sick3x', $data[3])
+                ->with('sick5x', $data[4]);
     }
 
     public function favorite($name)
@@ -108,7 +76,7 @@ class LadderController extends Controller
         return redirect()->back()->with('status', $msg);
     }
 
-    public function home()
+    public function home(Request $request)
     {
         $user = \Auth::user();
         $groups = DB::table('group_user')->where('user_id', $user->id)->orderBy('group_name')->get()->pluck('group_name');
@@ -119,38 +87,43 @@ class LadderController extends Controller
 
         foreach ($groups as $group_name)
         {
-            if($user->login == "amoclient")
-            {
-                $group = AmoAPI::get('groups/find/' . $group_name);
-                $students = collect($group["users"]);
-                $ids = $students->pluck("id")->map(function ($item) {
-                    return preg_replace("/[^0-9]/", "", $item);
-                });
-            }
-            else
-            {
-                $start = Carbon::today()->startOfWeek()->subDays(7);
-                $ids = DB::table('logs')
-                            ->select('student_id')
-                            ->distinct()
-                            ->where('group_name', $group_name)
-                            ->whereBetween('date', [$start->format("Y-m-d"), Carbon::now()->format("Y-m-d")])
-                            ->get('student_id')
-                            ->pluck('student_id');
-            }
+            // if($user->login == "amoclient")
+            // {
+            //     $group = AmoAPI::get('groups/find/' . $group_name);
+            //     $students = collect($group["users"]);
+            //     $ids = $students->pluck("id")->map(function ($item) {
+            //         return preg_replace("/[^0-9]/", "", $item);
+            //     });
+            // }
+            // else
+            // {
+            //     $start = Carbon::today()->startOfWeek()->subDays(7);
+            //     $ids = DB::table('logs')
+            //                 ->select('student_id')
+            //                 ->distinct()
+            //                 ->where('group_name', $group_name)
+            //                 ->whereBetween('date', [$start->format("Y-m-d"), Carbon::now()->format("Y-m-d")])
+            //                 ->get('student_id')
+            //                 ->pluck('student_id');
+            // }
 
-            $unit = DB::table('logs')
-                    ->select('unit_id')
-                    ->where('group_name', $group_name)
-                    ->first();
-            $unit = Unit::find($unit->unit_id);
-            $last = ImportController::getDate($unit);
-            $last = $last ? $last->formatLocalized('%a %e %b') : "(nog nooit)";
+            // $unit = DB::table('logs')
+            //         ->select('unit_id')
+            //         ->where('group_name', $group_name)
+            //         ->first();
+            // $unit = Unit::find($unit->unit_id);
+            // $last = ImportController::getDate($unit);
+            // $last = $last ? $last->formatLocalized('%a %e %b') : "(nog nooit)";
+
+            $oneGroup = $this->getOneLadder($group_name, $request);
 
             $data[] = array(
                 "group" => $group_name,
-                "students" => $this->ladder($date, $ids),
-                "last" => $last
+                "students" => $oneGroup[0],
+                "last" => $oneGroup[1],
+                "sickWeek" => $oneGroup[2],
+                "sick3x" => $oneGroup[3],
+                "sick5x" => $oneGroup[4]
             );
         }
         
@@ -186,14 +159,14 @@ class LadderController extends Controller
 
             // Threshold = de ondergrens waarBOVEN het niet meer oké is
 
-            $thresholdsZ = array(
-                5 => ["num" => 8,   "func" => "count"],
-                4 => ["num" => 5,   "func" => "count"],
-                3 => ["num" => 3,   "func" => "count"],
-                2 => ["num" => 2,   "func" => "count"],
-                1 => ["num" => 1,   "func" => "count"],
-            );
-            $this->process("Ziek", $students, $name, $nums, $thresholdsZ);
+            // $thresholdsZ = array(
+            //     5 => ["num" => 8,   "func" => "count"],
+            //     4 => ["num" => 5,   "func" => "count"],
+            //     3 => ["num" => 3,   "func" => "count"],
+            //     2 => ["num" => 2,   "func" => "count"],
+            //     1 => ["num" => 1,   "func" => "count"],
+            // );
+            // $this->process("Ziek", $students, $name, $nums, $thresholdsZ);
 
             $thresholdsRA = array(
                 5 => ["num" => 100, "func" => "count"],
@@ -264,5 +237,100 @@ class LadderController extends Controller
                 }
             }
         }
+    }
+
+    private function getOneLadder($name, $request)
+    {
+        $user = \Auth::user();
+        if($user->login == "amoclient")
+        {
+            $group = AmoAPI::get('groups/find/' . $name);
+            $students = collect($group["users"]);
+            if(count($students) < 1)
+            {
+                return redirect()->back()->with('status', ['danger' => 'Groep ' . $name . ' bevat geen studenten!']);
+                exit();
+            }
+
+            $ids = $students->pluck("id")->map(function ($item) {
+                return preg_replace("/[^0-9]/", "", $item);
+            });
+        }
+        else
+        {
+            $start = Carbon::today()->startOfWeek()->subDays(7);
+            $ids = DB::table('logs')
+                        ->select('student_id')
+                        ->distinct()
+                        ->where('group_name', $name)
+                        ->whereBetween('date', [$start->format("Y-m-d"), Carbon::now()->format("Y-m-d")])
+                        ->get('student_id')
+                        ->pluck('student_id');
+        }
+
+        $unit = DB::table('logs')
+                    ->select('unit_id')
+                    ->where('group_name', $name)
+                    ->first();
+        $unit = Unit::find($unit->unit_id);
+        $last = ImportController::getDate($unit);
+        $last = $last ? $last->formatLocalized('%a %e %b') : "(nog nooit)";
+
+        $date = Carbon::today()->startOfWeek()->subDays(\Auth::user()->weeks*7);
+        $students = $this->ladder($date, $ids);
+
+        //
+        // ZIEK: vind studenten die meer dan een week ziek zijn
+        $sickWeekRaw = DB::select("SELECT student_id, student_name, type, MAX(date) as max_date FROM logs WHERE student_id IN ({$ids->implode(',')}) GROUP BY student_id, student_name, type ORDER BY student_name, student_id, max_date DESC, type DESC");
+
+        $sickWeekRaw = collect($sickWeekRaw)->groupBy('student_id');
+        $sickWeek = collect();
+        $sevenDaysAgo = Carbon::today()->subDays(7);
+
+        foreach($sickWeekRaw as $studentRaw)
+        {
+            $student = $studentRaw->first();
+            $maxdate = Carbon::createFromFormat("Y-m-d H:i", $student->max_date . " 00:00"); 
+
+            if($student->type == "Ziek" && $maxdate <= $sevenDaysAgo)
+            {
+                $sickWeek->push($student);
+            }
+        }
+
+        //
+        // ZIEK: vind studenten die meer dan 3x ziek waren in 8 weken
+        $dateSick3x = Carbon::today()->startOfWeek()->subDays(8*7);
+        if($request->has('start'))
+        {
+            $dateSick3x = Carbon::createFromFormat('Y-m-d', $request->input('start'));
+        }
+
+        $sick3x = collect(DB::select("SELECT student_id, student_name, type, COUNT(duration) AS count
+                            FROM logs
+                            WHERE date > '{$dateSick3x->format('Y-m-d')}' AND student_id IN ({$ids->implode(',')}) AND type = 'Ziek'
+                            GROUP BY student_id, student_name, type
+                            HAVING count > 3"));
+
+        //
+        // ZIEK: vind studenten die meer dan 5x ziek waren in 18 weken
+        $dateSick5x = Carbon::today()->startOfWeek()->subDays(18*7);
+        if($request->has('start'))
+        {
+            $dateSick5x = Carbon::createFromFormat('Y-m-d', $request->input('start'));
+        }
+
+        $sick5x = collect(DB::select("SELECT student_id, student_name, type, COUNT(duration) AS count
+                            FROM logs
+                            WHERE date > '{$dateSick5x->format('Y-m-d')}' AND student_id IN ({$ids->implode(',')}) AND type = 'Ziek'
+                            GROUP BY student_id, student_name, type
+                            HAVING count > 5"));
+
+        $sick5xIds = $sick5x->pluck('student_id');
+        $sick3x = $sick3x->reject(function($item) use($sick5xIds){
+            return $sick5xIds->contains($item->student_id);
+        });
+
+        return [$students, $last, $sickWeek, $sick3x, $sick5x];
     }
 }

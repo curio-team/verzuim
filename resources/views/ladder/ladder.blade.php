@@ -64,4 +64,35 @@
             @endforeach
         </div>
     @endfor
+
+    @if(count($sickWeek))
+        <div class="sickWeek">
+            <strong>Meer dan een week ziek:</strong><br />
+                @foreach($sickWeek as $student)
+                    {{ $student->student_name }} <em>{{ $student->max_date }}</em><br />
+                @endforeach
+        </div>
+    @endif
+
+    @if(count($sick3x) || count($sick5x))
+        <div class="sick3or5x">
+
+            @if(count($sick3x))
+                <strong>>3x ziek in 8wkn</strong><br />
+                @foreach($sick3x as $student)
+                    {{ $student->student_name }} <em>{{ $student->count }}x</em><br />
+                @endforeach
+                <br />
+            @endif
+
+
+            @if(count($sick5x))
+                <strong>>5x ziek in 18wkn</strong><br />
+                @foreach($sick5x as $student)
+                    {{ $student->student_name }} <em>{{ $student->count }}x</em><br />
+                @endforeach
+            @endif
+
+        </div>
+    @endif
 </div>

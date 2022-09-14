@@ -298,9 +298,16 @@ class LadderController extends Controller
             }
         }
 
+        // Als het schooljaar pas net is begonnen, kijk dan niet 18 weken terug maar alleen begin schooljaar
+        $now = Carbon::now();
+        $year = $now->year;
+        if($now->month <= 7) $year -= 1;
+        $startOfSchoolYear = Carbon::createMidnightDate($year, 8, 1);
+
         //
         // ZIEK: vind studenten die meer dan 3x ziek waren in 8 weken
         $dateSick3x = Carbon::today()->startOfWeek()->subDays(8*7);
+        if($startOfSchoolYear > $dateSick3x) $dateSick3x = $startOfSchoolYear;
         if($request->has('start'))
         {
             $dateSick3x = Carbon::createFromFormat('Y-m-d', $request->input('start'));
@@ -315,6 +322,7 @@ class LadderController extends Controller
         //
         // ZIEK: vind studenten die meer dan 5x ziek waren in 18 weken
         $dateSick5x = Carbon::today()->startOfWeek()->subDays(18*7);
+        if($startOfSchoolYear > $dateSick5x) $dateSick5x = $startOfSchoolYear;
         if($request->has('start'))
         {
             $dateSick5x = Carbon::createFromFormat('Y-m-d', $request->input('start'));

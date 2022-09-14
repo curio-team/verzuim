@@ -328,8 +328,6 @@ class LadderController extends Controller
             $dateSick5x = Carbon::createFromFormat('Y-m-d', $request->input('start'));
         }
         
-        return [$dateSick3x, $dateSick5x];
-
         $sick5x = collect(DB::select("SELECT student_id, student_name, type, COUNT(duration) AS count
                             FROM logs
                             WHERE date > '{$dateSick5x->format('Y-m-d')}' AND student_id IN ({$ids->implode(',')}) AND type = 'Ziek'

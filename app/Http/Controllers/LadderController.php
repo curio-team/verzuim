@@ -308,7 +308,7 @@ class LadderController extends Controller
         // ZIEK: vind studenten die meer dan 3x ziek waren in 8 weken
         $dateSick3x = Carbon::today()->startOfWeek()->subDays(8*7);
         if($startOfSchoolYear > $dateSick3x) $dateSick3x = $startOfSchoolYear;
-        if($request->has('start'))
+        if($request->filled('start'))
         {
             $dateSick3x = Carbon::createFromFormat('Y-m-d', $request->input('start'));
         }
@@ -323,10 +323,12 @@ class LadderController extends Controller
         // ZIEK: vind studenten die meer dan 5x ziek waren in 18 weken
         $dateSick5x = Carbon::today()->startOfWeek()->subDays(18*7);
         if($startOfSchoolYear > $dateSick5x) $dateSick5x = $startOfSchoolYear;
-        if($request->has('start'))
+        if($request->filled('start'))
         {
             $dateSick5x = Carbon::createFromFormat('Y-m-d', $request->input('start'));
         }
+        
+        return [$dateSick3x, $dateSick5x];
 
         $sick5x = collect(DB::select("SELECT student_id, student_name, type, COUNT(duration) AS count
                             FROM logs
